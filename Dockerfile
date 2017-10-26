@@ -5,23 +5,33 @@
 
 FROM ubuntu:16.04
 
-RUN apt-get update \
+ENV U openwrt
+#ENV REPO_URL https://github.com/gnubee-git/gnubee-openwrt.git
+ENV REPO_URL https://wg.woollysoft.com/GnuBee/gnubee-openwrt.git
+
+ADD scripts scripts
+
+RUN echo "Acquire::http::Proxy-Auto-Detect \"/scripts/locate-apt-proxy.sh\";" \
+    > /etc/apt/apt.conf.d/10cacher \
+ && apt-get update \
  && apt-get install -y git-core subversion build-essential gcc-multilib \
                        libncurses5-dev zlib1g-dev gawk flex gettext wget \
 		       unzip python sudo \
  && apt-get clean \
- && useradd -m openwrt \
- && echo 'openwrt ALL=NOPASSWD: ALL' > /etc/sudoers.d/openwrt
+ && useradd -m $U \
+ && echo '$U ALL=NOPASSWD: ALL' > /etc/sudoers.d/$U
 
-RUN sudo -iu openwrt \
-    git clone https://github.com/gnubee-git/gnubee-openwrt.git openwrt
-WORKDIR /openwrt
+RUN sudo -iu $U GIT_SSL_NO_VERIFY=true git clone $REPO_URL openwrt
 
-RUN sudo -iu openwrt cp openwrt/GB-Deb.config openwrt/.config \
- && sudo -iu openwrt openwrt/scripts/feeds update -a \
- && sudo -iu openwrt openwrt/scripts/feeds install -a \
- && sudo -iu openwrt make -C openwrt defconfig
+WORKDIR /home/$U/openwrt
 
-CMD sudo -iu openwrt make make defconfig \
- && sudo -iu openwrt make make -j1 V=s download \
- && sudo -iu openwrt ionice -c 3 nice -n 19 make -j2 V=s > buildlog
+ADD dl dl
+
+RUN sudo -u $U cp ./GB-Deb.config ./.config \
+ && sudo -u $U ./scripts/feeds update -a \
+ && sudo -u $U ./scripts/feeds install -a \
+ && sudo -u $U make defconfig
+
+#CMD sudo -u $U make defconfig \
+# && sudo -u $U make -j1 V=s download \
+# && sudo -u $U ionice -c 3 nice -n 19 make -j2 V=s > buildlog
