@@ -7,6 +7,15 @@ project could no longer successfully build the project.
 
 Like the noonien Docker, we create an openwrt user to perform the build.
 
+** Download Cache
+
+If there is a directory in the root of this repo when checked-out
+called =dl/=, all files in this directory will be copied into the
+openwrt build to a directory of the same name.  This cache of
+downloaded files will reduce the time to perform the build
+substantially.  If no such directory exists, the build will download
+the files from the Internet.
+
 ** Building Image
 
 The simplest way to build an image from the =Dockerfile= is to make
@@ -16,6 +25,11 @@ of this repository:
 : docker build -t gnubee .
 
 The result will be an image labeled =gnubee=.
+
+If you wish to use an alternative repository for the openwrt project,
+pass the URL on the command line as an argument:
+
+: docker build -t gnubee --build-arg repo_url=URL .
 
 ** Using Image
 
@@ -27,9 +41,12 @@ packages and then a container instantiated to build the firmware.
 The command to instantiate a container is something like this where
 /IMAGE/ is a reference to the image built from the =Dockerfile=:
 
-: docker run -it IMAGE sudo -u openwrt bash
+: docker run -it IMAGE sudo -iu openwrt bash
 
 If /CONTAINER/ is already running, it may be entered with a different
 command:
 
-: docker exec -it CONTAINER sudo -u openwrt bash
+: docker exec -it CONTAINER sudo -iu openwrt bash
+
+Keep in mind that the openwrt build must not be performed as root.
+Use the openwrt user instead.
