@@ -25,13 +25,12 @@ RUN sudo -iu $U GIT_SSL_NO_VERIFY=true git clone $REPO_URL openwrt
 
 WORKDIR /home/$U/openwrt
 
-ADD dl dl
+COPY dl/* dl/
 
 RUN sudo -u $U cp ./GB-Deb.config ./.config \
  && sudo -u $U ./scripts/feeds update -a \
  && sudo -u $U ./scripts/feeds install -a \
  && sudo -u $U make defconfig
 
-#CMD sudo -u $U make defconfig \
-# && sudo -u $U make -j1 V=s download \
+#CMD sudo -u $U make -j1 V=s download \
 # && sudo -u $U ionice -c 3 nice -n 19 make -j2 V=s > buildlog
