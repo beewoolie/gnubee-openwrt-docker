@@ -15,10 +15,10 @@ packages and then a container instantiated to build the firmware.
 The command to instantiate a container is something like this where
 /IMAGE/ is a reference to the image built from the =Dockerfile=:
 
-: docker run -it /IMAGE/ sudo -iu openwrt bash
+: docker run -it IMAGE sudo -iu openwrt bash
 
 If /CONTAINER/ is already running, it may be entered with a different
 command:
 
-: docker exec -i /CONTAINER/ sudo -iu openwrt bash
+: docker exec -i CONTAINER sudo -iu openwrt bash
 
