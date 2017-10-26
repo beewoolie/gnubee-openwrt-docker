@@ -2,19 +2,18 @@
 
 The Dockerfile in this repository may be used to build the firmware
 for the GnuBee GB1 and its successors.  It started as a derivative of
-the [[https://github.com/noonien/docker-openwrt-buildroot][noonien docker-openwrt-buildroot]], but it was discovered that that
-project could no longer successfully build the project.
+the [[https://github.com/noonien/docker-openwrt-buildroot][noonien/docker-openwrt-buildroot]], but it was found that that
+project could no longer successfully build the firmware.
 
-Like the noonien Docker, we create an openwrt user to perform the build.
+Like the noonien Docker, we create an /openwrt/ user to perform the build.
 
 ** Download Cache
 
-If there is a directory in the root of this repo when checked-out
-called =dl/=, all files in this directory will be copied into the
-openwrt build to a directory of the same name.  This cache of
-downloaded files will reduce the time to perform the build
-substantially.  If no such directory exists, the build will download
-the files from the Internet.
+If there is a directory =dl/= in the root of this repo when building
+the image, all files in that directory will be copied into the openwrt
+build to a directory of the same name.  This cache of downloaded files
+will reduce the time to perform the build substantially.  If no such
+directory exists, the build will download the files from the Internet.
 
 ** Building Image
 
@@ -31,7 +30,10 @@ pass the URL on the command line as an argument:
 
 : docker build -t gnubee --build-arg repo_url=URL .
 
-** Using Image
+When the build completes, the firmware is left as an artifact in
+=/home/openwrt/openwrt/binaries/=.
+
+** Using Docker Image
 
 There are two ways to use the image.  It may be run as-is which will
 build the firmware image chosen by the =.config= file.  Or, it may be
