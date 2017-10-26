@@ -26,8 +26,10 @@
 #   Debug::Acquire::http yes;
 #
 
-# Proxy to verify
-u=apt-cacher:3142
+# Proxy to verify.  We'd like to pass at least one URL on the command
+# line, but the apt mechanism that uses this script does not permit
+# arguments.
+u=${1:-apt-cacher:3142}
 
 # ---
 
