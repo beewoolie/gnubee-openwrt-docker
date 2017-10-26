@@ -1,4 +1,4 @@
-* docker-gnubee-openwrt
+* gnubee-openwrt-docker
 
 The Dockerfile in this repository may be used to build the firmware
 for the GnuBee GB1 and its successors.  It started as a derivative of
@@ -48,5 +48,5 @@ command:
 
 : docker exec -it CONTAINER sudo -iu openwrt bash
 
-Keep in mind that the openwrt build must not be performed as root.
-Use the openwrt user instead.
+Keep in mind that the openwrt build must not be performed as /root/.
+Use the /openwrt/ user instead.
